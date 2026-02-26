@@ -47,11 +47,18 @@ local function select_node(node)
   vim.api.nvim_win_set_cursor(0, { end_row_pos, end_col_pos > 0 and end_col_pos - 1 or 0 })
 end
 
+local function in_cmd_buf(key)
+    if vim.fn.getcmdwintype() == '' then return false end
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'n', false)
+    return true
+end
+
 M.setup = function(config)
   local incr_key = config.incr_key and config.incr_key or '<tab>'
   local decr_key = config.decr_key and config.decr_key or '<s-tab>'
 
   vim.keymap.set({ 'n' }, incr_key, function()
+    if in_cmd_buf(incr_key) then return end
     _G.selected_nodes = {}
 
     local current_node = get_node_at_cursor()
@@ -121,6 +128,7 @@ M.setup = function(config)
   end, { desc = 'Increment selection' })
 
   vim.keymap.set('x', decr_key, function()
+    if in_cmd_buf(decr_key) then return end
     if #_G.selected_nodes > 1 then
       table.remove(_G.selected_nodes)
       local current_node = _G.selected_nodes[#_G.selected_nodes]
