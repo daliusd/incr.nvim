@@ -48,7 +48,9 @@ local function select_node(node)
 end
 
 local function in_cmd_buf(key)
-    if vim.fn.getcmdwintype() == '' then return false end
+    local buftype = vim.api.nvim_get_option_value('buftype', {})
+    if buftype ~= 'quickfix' and
+        vim.fn.getcmdwintype() == '' then return false end
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'n', false)
     return true
 end
