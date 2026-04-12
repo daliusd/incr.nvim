@@ -1,5 +1,20 @@
 # incr.nvim
 
+⚠️⚠️⚠️NOTE⚠️⚠️⚠️: This plugin is not necessary anymore in nvim 0.12+. You can
+get same behaviour using following keymap:
+
+```lua
+local keymap = vim.keymap.set
+keymap('n', '<Tab>', ':normal van<cr>', opts)
+keymap('v', '<Tab>', function()
+  vim.api.nvim_feedkeys('an', 'v', false)
+end)
+keymap('n', '<S-Tab>', ':normal vin<cr>', opts)
+keymap('v', '<S-Tab>', function()
+  vim.api.nvim_feedkeys('in', 'v', false)
+end)
+```
+
 This plugin uses nvim-treesitter to select nodes incrementally. You can start
 selection in normal mode by clicking `tab` and then repeatedly clicking `tab`
 select more scope. You can use `s-tab` to decrement selection.
